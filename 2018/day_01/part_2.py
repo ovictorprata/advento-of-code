@@ -1030,25 +1030,25 @@ numbers_list = [int(number) for number in numbers_list]
 # numbers_list = [-6, 3, 8, 5, -6]
 
 sums = {numbers_list[0]+numbers_list[1]}
-repetitions = 0
+current_sum = numbers_list[0]+numbers_list[1]
 duplicate = None 
-while True:
-    repetitions += 1
-    
+repetition = 0
+while True: 
+    repetition += 1  
     for i in range(len(numbers_list)):
-        if (i == 0 or i == 1) and repetitions == 1:
+        if i <= 1 and repetition == 1:
             continue
         else:
-            print('hey')
-            sum += numbers_list[i]
-        if sum in sums:
-            print(sum)
-            break
-        else:
-            sums.add(sum)
-    if sum in sums:
-        print(sum)
+            current_sum += numbers_list[i]
+            if current_sum in sums:
+                duplicate = current_sum
+                break
+            else:
+                sums.add(current_sum)
+    if duplicate != None:
         break
+    
+print(duplicate)
     
 
 
