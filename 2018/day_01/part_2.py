@@ -1031,7 +1031,7 @@ numbers_list = [int(number) for number in numbers_list]
 
 sums = {numbers_list[0]+numbers_list[1]}
 repetitions = 0
-duplicate = None
+duplicate = None 
 while True:
     repetitions += 1
     
