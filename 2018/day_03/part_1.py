@@ -1332,16 +1332,16 @@ print(rows, columns)
 
 board = get_board(rows, columns)
 overlaps = 0
-coords_overlaps = []
+coords_overlaps = set()
 for conj in conjs:
     i_initial, j_initial = conj[1], conj[2]
     for i in range(j_initial, j_initial + conj[4]):
         for j in range(i_initial, i_initial + conj[3]):
             if board[i][j] != '.':
-                coords_overlaps.append((i, j))
+                coords_overlaps.add((i, j))
                 overlaps += 1
                 board[i][j] = 'X'
             else:
                 board[i][j] = str(conj[0])
 
-print(len(set(coords_overlaps)))
+print(len(coords_overlaps))
