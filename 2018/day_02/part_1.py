@@ -267,9 +267,7 @@ for box in boxes:
     for number in set_occurencies:
         repetitions[number] += 1
 
-total = 1
-for value in repetitions.values():
-    total *= value
+total = repetitions[2] * repetitions[3]
 
 print(total)
 
