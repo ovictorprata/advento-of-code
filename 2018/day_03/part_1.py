@@ -1288,6 +1288,9 @@ conjs = '''#1 @ 236,827: 24x17
 #1286 @ 638,274: 19x24
 #1287 @ 272,638: 10x28'''
 
+# conjs = '''#1 @ 1,3: 4x4'
+#2 @ 3,1: 4x4
+# #3 @ 5,5: 2x2'''
 conjs = conjs.splitlines()
 pattern = r"#(\d+)\s*@\s*(\d+),(\d+):\s*(\d+)x(\d+)"
 
@@ -1329,18 +1332,16 @@ print(rows, columns)
 
 board = get_board(rows, columns)
 overlaps = 0
+coords_overlaps = []
 for conj in conjs:
-    print(conj)
     i_initial, j_initial = conj[1], conj[2]
     for i in range(j_initial, j_initial + conj[4]):
         for j in range(i_initial, i_initial + conj[3]):
             if board[i][j] != '.':
+                coords_overlaps.append((i, j))
                 overlaps += 1
                 board[i][j] = 'X'
             else:
-                print(f'linha: {i} x col: {j}')
                 board[i][j] = str(conj[0])
-print_board(board)
-print(overlaps)
 
-    
+print(len(set(coords_overlaps)))
