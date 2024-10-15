@@ -1313,26 +1313,13 @@ def print_board(board):
         
 conjs = [extract_numbers(s) for s in conjs]
 
-# def get_board_size(coords):
-#     rows_len = 0
-#     columns_len = 0
-#     for coord in coords:
-#         column_sum = coord[1] + coord[3]
-#         row_sum = coord[2] + coord[4]
-#         if column_sum > columns_len:
-#             columns_len = column_sum
-#         if row_sum > rows_len:
-#             rows_len = row_sum
-#     return rows_len, columns_len
-
 rows = max(tupla[2] + tupla[4] for tupla in conjs)
 columns = max(tupla[1] + tupla[3] for tupla in conjs)
-print(rows, columns)
-
 
 board = get_board(rows, columns)
 overlaps = 0
 coords_overlaps = set()
+numbers_overlaps = set()
 for conj in conjs:
     i_initial, j_initial = conj[1], conj[2]
     for i in range(j_initial, j_initial + conj[4]):
@@ -1340,8 +1327,9 @@ for conj in conjs:
             if board[i][j] != '.':
                 coords_overlaps.add((i, j))
                 overlaps += 1
-                board[i][j] = 'X'
-            else:
-                board[i][j] = str(conj[0])
-
-print(len(coords_overlaps))
+                numbers_overlaps.add(int(board[i][j]))
+                numbers_overlaps.add(conj[0])
+            board[i][j] = conj[0]
+          
+numeros = {x for x in range(1, len(conjs)+1)}
+print(numeros - numbers_overlaps)
