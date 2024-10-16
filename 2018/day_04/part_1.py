@@ -15,7 +15,7 @@ def print_guards_times(guards_infos) -> None:
             print(date)
             print(''.join(schedule))
 
-def create_guard_number_if_not_exist() -> None:
+def ensure_guard_exists() -> None:
     if guard_number not in guards_infos:
         guards_infos[guard_number] = {}
 
@@ -1135,7 +1135,7 @@ for timestamp, action in sample:
     day = date[5:10]
     if '#' in action:
         guard_number = extract_number_guard_from_str(action)
-        create_guard_number_if_not_exist()
+        ensure_guard_exists()
     elif 'asleep' in action:
         if day not in guards_infos[guard_number]:
             guards_infos[guard_number][day] = ['.' for _ in range(60)]
