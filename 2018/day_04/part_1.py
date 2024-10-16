@@ -14,6 +14,11 @@ def print_guards_times(guards_infos: dict) -> None:
         for date, schedule in guards_info.items():
             print(date)
             print(''.join(schedule))
+
+def create_guard_number_if_not_exist(guards: dict) -> None:
+    if guard_number not in guards_infos:
+        guards_infos[guard_number] = {}
+
 sample = '''[1518-11-01 00:05] falls asleep
 [1518-11-01 00:25] wakes up
 [1518-11-01 00:30] falls asleep
@@ -38,16 +43,17 @@ sample.sort(key=lambda x:x[0])
 guards_infos = {}
 for timestamp, action in sample:
     date, time = timestamp.split(' ')
+    day = date[5:10]
     if '#' in action:
         guard_number = extract_number_guard_from_str(action)
-        day = date[5:10]
-        guards_infos[guard_number] = {}
-        guards_infos[guard_number][day] = ['.' for _ in range(60)]
+        create_guard_number_if_not_exist(guards_infos)
     elif 'asleep' in action:
-        date, time = timestamp.split(' ')
+        if day not in guards_infos[guard_number]:
+            guards_infos[guard_number][day] = ['.' for _ in range(60)]
         asleep_start = int(time[-2:])
     else:
         asleep_end = int(time[-2:])
+
         for i in range(asleep_start, asleep_end):
             guards_infos[guard_number][day][i] = '#'
 print_guards_times(guards_infos)
