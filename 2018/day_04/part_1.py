@@ -25,7 +25,7 @@ def count_minutes_asleep(days: dict) -> int:
         minutes += schedule.count('#')
     return minutes
 
-def get_sleepiest_guard(guards: dict):
+def get_sleepiest_guard(guards: dict) -> int:
     max_minutes_asleep = 0
     sleepiest_guard = None
     for guard, days_schedule in guards.items():  
@@ -34,6 +34,19 @@ def get_sleepiest_guard(guards: dict):
             max_minutes_asleep = minutes_asleep
             sleepiest_guard = guard
     return sleepiest_guard
+
+
+def get_most_asleep_min(schedule: dict) -> int:
+    schedule_list = list(schedule.values())
+    most_asleep_minutes = 0
+    most_asleep_time = None
+    for i in range(len(schedule_list[0])):
+        min_asleep = sum(minute[i] == '#' for minute in schedule_list)
+        if min_asleep > most_asleep_minutes:
+            most_asleep_minutes = min_asleep
+            most_asleep_time = i
+    return most_asleep_time
+
 
 sample = '''[1518-11-01 00:05] falls asleep
 [1518-11-01 00:25] wakes up
@@ -74,4 +87,6 @@ for timestamp, action in sample:
             guards_infos[guard_number][day][i] = '#'
 
 sleepiest_guard = get_sleepiest_guard(guards_infos)
-print(sleepiest_guard)
+most_asleep_minute = get_most_asleep_min(guards_infos[sleepiest_guard])
+answer = sleepiest_guard * most_asleep_minute
+print(answer)
