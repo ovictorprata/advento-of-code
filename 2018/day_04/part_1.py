@@ -6,7 +6,7 @@ def extract_number_guard_from_str(timestamps: list) -> int:
         guard_number = int(guard_number_regex.group(1))
     return guard_number
 
-def print_guards_times(guards_infos: dict) -> None:
+def print_guards_times(guards_infos) -> None:
     for number, guards_info in guards_infos.items():
         print('*' * 80)
         print(number)
@@ -15,9 +15,25 @@ def print_guards_times(guards_infos: dict) -> None:
             print(date)
             print(''.join(schedule))
 
-def create_guard_number_if_not_exist(guards: dict) -> None:
+def create_guard_number_if_not_exist() -> None:
     if guard_number not in guards_infos:
         guards_infos[guard_number] = {}
+
+def count_minutes_asleep(days: dict) -> int:
+    minutes = 0
+    for schedule in days.values():
+        minutes += schedule.count('#')
+    return minutes
+
+def get_sleepiest_guard(guards: dict):
+    max_minutes_asleep = 0
+    sleepiest_guard = None
+    for guard, days_schedule in guards.items():  
+        minutes_asleep = count_minutes_asleep(days_schedule)
+        if minutes_asleep > max_minutes_asleep:
+            max_minutes_asleep = minutes_asleep
+            sleepiest_guard = guard
+    return sleepiest_guard
 
 sample = '''[1518-11-01 00:05] falls asleep
 [1518-11-01 00:25] wakes up
@@ -46,7 +62,7 @@ for timestamp, action in sample:
     day = date[5:10]
     if '#' in action:
         guard_number = extract_number_guard_from_str(action)
-        create_guard_number_if_not_exist(guards_infos)
+        create_guard_number_if_not_exist()
     elif 'asleep' in action:
         if day not in guards_infos[guard_number]:
             guards_infos[guard_number][day] = ['.' for _ in range(60)]
@@ -56,4 +72,6 @@ for timestamp, action in sample:
 
         for i in range(asleep_start, asleep_end):
             guards_infos[guard_number][day][i] = '#'
-print_guards_times(guards_infos)
+
+sleepiest_guard = get_sleepiest_guard(guards_infos)
+print(sleepiest_guard)
