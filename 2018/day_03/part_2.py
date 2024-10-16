@@ -1317,16 +1317,12 @@ rows = max(tupla[2] + tupla[4] for tupla in conjs)
 columns = max(tupla[1] + tupla[3] for tupla in conjs)
 
 board = get_board(rows, columns)
-overlaps = 0
-coords_overlaps = set()
 numbers_overlaps = set()
 for conj in conjs:
     i_initial, j_initial = conj[1], conj[2]
     for i in range(j_initial, j_initial + conj[4]):
         for j in range(i_initial, i_initial + conj[3]):
             if board[i][j] != '.':
-                coords_overlaps.add((i, j))
-                overlaps += 1
                 numbers_overlaps.add(int(board[i][j]))
                 numbers_overlaps.add(conj[0])
             board[i][j] = conj[0]
