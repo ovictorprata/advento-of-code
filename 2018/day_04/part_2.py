@@ -1,6 +1,6 @@
 from re import search
 
-def extract_number_guard_from_str(timestamps: list) -> int:
+def extract_guard_number_from_str(timestamps: list) -> int:
     guard_number_regex = search(r'#(\d+)', timestamps)
     if guard_number_regex:
         guard_number = int(guard_number_regex.group(1))
@@ -40,14 +40,14 @@ def get_most_asleep_min(guard_schedule: dict):
     guard_schedule = list(guard_schedule.values())
     most_asleep_minutes = 0
     most_asleep_time = None
-    print(len(guard_schedule[0]))
-    # for i in range(len(guard_schedule[0])):
-    #     minutes_asleep = sum(minute[i] == '#' for minute in guard_schedule)
-    #     if minutes_asleep > most_asleep_minutes:
-    #         most_asleep_minutes = minutes_asleep
-    #         most_asleep_time = i
-    #         occurencies = minutes_asleep
-    # return most_asleep_time, most_asleep_time
+    if guard_schedule:
+        for i in range(len(guard_schedule[0])):
+            minutes_asleep = sum(minute[i] == '#' for minute in guard_schedule)
+            if minutes_asleep > most_asleep_minutes:
+                most_asleep_minutes = minutes_asleep
+                most_asleep_time = i
+                occurencies = minutes_asleep
+    return most_asleep_time, most_asleep_time
 
 
 
@@ -1109,16 +1109,21 @@ sample = '''[1518-07-03 23:58] Guard #2437 begins shift
 [1518-05-14 00:53] wakes up
 [1518-06-25 00:02] falls asleep'''
 
+def get_txt_from_correct_sample(input: str):
+    with open('output.txt', 'w') as file:
+        for item in input:
+            file.write(''.join(item) + "\n")
 
 sample = sample.splitlines()
 sample = [x.replace('[', '').split(']') for x in sample]
 sample.sort(key=lambda x:x[0])
+
 guards_infos = {}
 for timestamp, action in sample:
     date, time = timestamp.split(' ')
     day = date[5:10]
     if '#' in action:
-        guard_number = extract_number_guard_from_str(action)
+        guard_number = extract_guard_number_from_str(action)
         ensure_guard_exists()
     elif 'asleep' in action:
         if day not in guards_infos[guard_number]:
@@ -1136,9 +1141,11 @@ most_asleep_time = None
 most_asleep_guard = None
 
 for guard_number, guard_info in guards_infos.items():
-    asleep_time_guard, occurencies = get_most_asleep_min(guard_info)
-#     if occurencies > biggest_occurency:
-#         biggest_occurency = occurencies
-#         most_asleep_time = asleep_time_guard
-#         most_asleep_guard = guard_number
-# print(most_asleep_time * guard_number)
+    if guard_info:
+        asleep_time_guard, occurencies = get_most_asleep_min(guard_info)
+        if occurencies > biggest_occurency:
+            biggest_occurency = occurencies
+            most_asleep_time = asleep_time_guard
+            most_asleep_guard = guard_number
+print(guard_number)
+print(most_asleep_time * guard_number)
