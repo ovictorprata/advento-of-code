@@ -18,7 +18,4 @@ while True:
     if last_polymer == actual_polymer:
         break
 
-
-            
-
 print(len(sample_list))
